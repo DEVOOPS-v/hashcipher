@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Made for her - Hascipher Desktop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg-main: #ebf4ff;
+        --bg-card: #ffffff;
+        --accent-primary: #2563eb;
+        --accent-soft: #dbeafe;
+        --accent-deep: #1e40af;
+        --text-dark: #0f172a;
+        --text-gray: #64748b;
+        --window-border: #cbd5e1;
+        --success: #10b981;
+      }
+
+      * {
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        color: var(--text-dark);
+        overflow-x: hidden;
+      }
+
+      .page-wrapper {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px;
+        background: linear-gradient(
+          135deg,
+          #dbeafe 0%,
+          #eff6ff 50%,
+          #f8fafc 100%
+        );
+        background-attachment: fixed;
+      }
+
+      .hero-section {
+        text-align: center;
+        max-width: 900px;
+        margin-bottom: 30px;
+        width: 100%;
+      }
+      h1 {
+        font-size: clamp(28px, 5vw, 56px);
+        line-height: 1.15;
+        margin: 0 0 15px 0;
+        font-weight: 700;
+        color: var(--text-dark);
+      }
+
+      .rotating-text-wrapper {
+        display: inline-flex;
+        flex-direction: column;
+        height: 1.2em;
+        vertical-align: top;
+        overflow: hidden;
+        color: var(--accent-primary);
+      }
+      .rotating-text-wrapper span {
+        display: block;
+        height: 1.2em;
+        animation: rotateText 8s infinite cubic-bezier(0.76, 0, 0.24, 1);
+      }
+
+      @keyframes rotateText {
+        0%,
+        20% {
+          transform: translateY(0);
+        }
+        25%,
+        45% {
+          transform: translateY(-1.2em);
+        }
+        50%,
+        70% {
+          transform: translateY(-2.4em);
+        }
+        75%,
+        95% {
+          transform: translateY(-3.6em);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      .mockup-container {
+        position: relative;
+        width: 100%;
+        max-width: 900px;
+        margin: 20px auto 60px auto;
+      }
+
+      .desktop-frame {
+        background: var(--bg-card);
+        border: 1px solid var(--window-border);
+        border-radius: 12px;
+        min-height: 580px;
+        width: 100%;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(37, 99, 235, 0.1);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .desktop-header {
+        background: #f1f5f9;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--window-border);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+      .dot-r {
+        background: #ff5f56;
+      }
+      .dot-y {
+        background: #ffbd2e;
+      }
+      .dot-g {
+        background: #27c93f;
+      }
+
+      .desktop-content {
+        flex-grow: 1;
+        padding: 40px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+      }
+
+      @media (max-width: 768px) {
+        .desktop-content {
+          grid-template-columns: 1fr;
+          padding: 20px;
+        }
+      }
+
+      .status-card {
+        background: #f8fbff;
+        border: 1px solid var(--accent-soft);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      .status-indicator {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--success);
+        margin-bottom: 10px;
+      }
+      .pulse {
+        width: 8px;
+        height: 8px;
+        background: var(--success);
+        border-radius: 50%;
+        animation: pulse-green 2s infinite;
+      }
+      @keyframes pulse-green {
+        0% {
+          box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+        }
+      }
+
+      .hascipher-section {
+        background: #f8fbff;
+        border-radius: 16px;
+        padding: 24px;
+        border: 1px solid var(--accent-soft);
+      }
+      .cipher-input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #cbd5e1;
+        font-size: 13px;
+        margin-bottom: 10px;
+        outline: none;
+      }
+      .hash-result {
+        word-break: break-all;
+        font-family: monospace;
+        font-size: 11px;
+        background: var(--text-dark);
+        padding: 12px;
+        border-radius: 8px;
+        color: #60a5fa;
+        margin-top: 12px;
+        display: none;
+        position: relative;
+      }
+
+      .action-btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        background: var(--accent-primary);
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-bottom: 10px;
+      }
+      .action-btn:hover {
+        background: var(--accent-deep);
+        transform: translateY(-2px);
+      }
+
+      .secondary-btn {
+        background: white;
+        color: var(--accent-primary);
+        border: 1px solid var(--accent-primary);
+      }
+
+      .copy-btn {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        background: #334155;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        font-size: 9px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.8s ease-out;
+      }
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .avatar-circle {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--accent-primary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .cipher-span {
+        color: var(--accent-primary);
+      }
+
+      /* KEY DISPLAY WRAPPER */
+      .key-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .key-display {
+        flex-grow: 1;
+        font-family: monospace;
+        font-size: 11px;
+        color: var(--text-gray);
+        background: #f1f5f9;
+        padding: 10px;
+        border-radius: 8px;
+        text-align: center;
+        border: 1px dashed var(--window-border);
+      }
+
+      .key-copy-icon {
+        background: var(--accent-soft);
+        color: var(--accent-primary);
+        border: none;
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 700;
+        transition: 0.2s;
+      }
+      .key-copy-icon:hover {
+        background: var(--accent-primary);
+        color: white;
+      }
+
+      /* MODAL STYLES */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.7);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+      .modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="modal-overlay" id="keyModal">
+      <div class="modal-content">
+        <h3 style="margin-top: 0; color: var(--text-dark)">
+          Authentication Key
+        </h3>
+        <p
+          style="color: var(--text-gray); font-size: 14px; margin-bottom: 20px"
+        >
+          Please paste your secret key to authorize decryption.
+        </p>
+
+        <input
+          type="text"
+          id="modalKeyInput"
+          class="cipher-input"
+          placeholder="Paste key here..."
+          style="border: 1px solid var(--accent-primary); margin-bottom: 15px"
+        />
+
+        <div style="display: flex; gap: 10px">
+          <button
+            class="action-btn"
+            onclick="validateAndDecipher()"
+            style="margin-bottom: 0"
+          >
+            Verify & Decipher
+          </button>
+          <button
+            class="action-btn secondary-btn"
+            onclick="closeModal()"
+            style="margin-bottom: 0"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-wrapper">
+      <header class="hero-section">
+        <h1 class="reveal">
+          Welcome to Hash<span class="cipher-span">cipher</span> <br />
+          <div class="rotating-text-wrapper">
+            <span>precision.</span>
+            <span>privacy.</span>
+            <span>integrity.</span>
+            <span>security.</span>
+          </div>
+        </h1>
+      </header>
+
+      <div class="mockup-container reveal">
+        <div class="desktop-frame">
+          <div class="desktop-header">
+            <div class="dot dot-r"></div>
+            <div class="dot dot-y"></div>
+            <div class="dot dot-g"></div>
+            <div
+              style="
+                margin-left: 10px;
+                font-size: 11px;
+                color: #94a3b8;
+                font-weight: 500;
+              "
+            >
+              hascipher-secure-v2.local
+            </div>
+          </div>
+
+          <div class="desktop-content">
+            <div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 15px;
+                  margin-bottom: 25px;
+                "
+              >
+                <div class="avatar-circle">RR</div>
+                <div>
+                  <div
+                    id="timeGreeting"
+                    style="
+                      font-size: 12px;
+                      color: var(--text-gray);
+                      font-weight: 600;
+                    "
+                  >
+                    Hello,
+                  </div>
+                  <div style="font-weight: 700; font-size: 20px">
+                    Sir Ricx Rosco
+                  </div>
+                </div>
+              </div>
+
+              <h2 style="font-size: 22px; margin: 0 0 15px 0">
+                Security Insights
+              </h2>
+
+              <div class="status-card">
+                <div class="status-indicator">
+                  <div class="pulse"></div>
+                  System Status: Secure
+                </div>
+                <div
+                  style="
+                    font-size: 13px;
+                    color: var(--text-gray);
+                    line-height: 1.6;
+                  "
+                >
+                  All data is processed locally. Ensure your session key is
+                  active before attempting to decipher.
+                </div>
+              </div>
+
+              <div style="padding: 10px">
+                <h4
+                  style="
+                    font-size: 11px;
+                    text-transform: uppercase;
+                    color: var(--text-gray);
+                    margin-bottom: 10px;
+                    letter-spacing: 0.5px;
+                  "
+                >
+                  Quick Safety Tips
+                </h4>
+                <ul
+                  style="
+                    font-size: 13px;
+                    color: var(--text-dark);
+                    padding-left: 18px;
+                    line-height: 1.8;
+                  "
+                >
+                  <li>Session keys expire on refresh</li>
+                  <li>Symmetric AES-GCM logic</li>
+                  <li>Copy result to share securely</li>
+                </ul>
+              </div>
+              <button
+                class="action-btn secondary-btn"
+                style="margin-top: 15px"
+                onclick="location.href = 'help.html'"
+              >
+                Help?
+              </button>
+            </div>
+
+            <div class="hascipher-section">
+              <h3
+                style="
+                  font-size: 18px;
+                  margin-top: 0;
+                  color: var(--accent-primary);
+                "
+              >
+                Hascipher Engine
+              </h3>
+
+              <label
+                style="
+                  font-size: 11px;
+                  font-weight: 700;
+                  color: var(--text-gray);
+                  display: block;
+                  margin-bottom: 5px;
+                "
+                >SESSION KEY</label
+              >
+
+              <div class="key-container">
+                <span id="currentKey" class="key-display"
+                  >No key generated</span
+                >
+                <button
+                  class="key-copy-icon"
+                  onclick="copySessionKey()"
+                  title="Copy Key"
+                >
+                  Copy
+                </button>
+              </div>
+
+              <button
+                class="action-btn secondary-btn"
+                onclick="generateKey()"
+                style="font-size: 11px; padding: 8px"
+              >
+                Generate New Key
+              </button>
+
+              <label
+                style="
+                  font-size: 11px;
+                  font-weight: 700;
+                  color: var(--text-gray);
+                  display: block;
+                  margin-bottom: 5px;
+                  margin-top: 15px;
+                "
+                >ENCRYPTION INPUT</label
+              >
+              <input
+                type="text"
+                id="encryptInput"
+                class="cipher-input"
+                placeholder="Text to hide..."
+              />
+              <button class="action-btn" onclick="runEncryption()">
+                Encrypt
+              </button>
+
+              <label
+                style="
+                  font-size: 11px;
+                  font-weight: 700;
+                  color: var(--text-gray);
+                  display: block;
+                  margin-bottom: 5px;
+                  margin-top: 10px;
+                "
+                >DECIPHER INPUT</label
+              >
+              <input
+                type="text"
+                id="decipherInput"
+                class="cipher-input"
+                placeholder="Hash to reveal..."
+              />
+              <button class="action-btn secondary-btn" onclick="openKeyModal()">
+                Decipher
+              </button>
+
+              <div id="hashOutput" class="hash-result">
+                <span id="resultText"></span>
+                <button class="copy-btn" onclick="copyResult()">
+                  Copy Result
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer
+        style="margin-top: 10px; color: var(--text-gray); font-size: 11px"
+      >
+        © 2026 Clifford Development. Encrypted & Secure.
+      </footer>
+    </div>
+
+    <script>
+      let activeKey = null;
+
+      function generateKey() {
+        activeKey =
+          "KEY-" + Math.random().toString(36).substring(2, 10).toUpperCase();
+        document.getElementById("currentKey").textContent = activeKey;
+      }
+
+      function copySessionKey() {
+        if (!activeKey) {
+          alert("Generate a key first!");
+          return;
+        }
+        navigator.clipboard.writeText(activeKey);
+        const btn = document.querySelector(".key-copy-icon");
+        btn.textContent = "Copied!";
+        setTimeout(() => (btn.textContent = "Copy"), 1500);
+      }
+
+      function openKeyModal() {
+        const decipherVal = document.getElementById("decipherInput").value;
+        if (!decipherVal) return;
+        document.getElementById("keyModal").style.display = "flex";
+      }
+
+      function closeModal() {
+        document.getElementById("keyModal").style.display = "none";
+        document.getElementById("modalKeyInput").value = "";
+      }
+
+      function validateAndDecipher() {
+        const inputKey = document.getElementById("modalKeyInput").value;
+
+        if (!activeKey || inputKey !== activeKey) {
+          alert("Invalid or missing session key. Verification failed.");
+          return;
+        }
+
+        closeModal();
+        runDecryption();
+      }
+
+      function runEncryption() {
+        const input = document.getElementById("encryptInput").value;
+        if (!input) return;
+        if (!activeKey) {
+          alert("Please generate a Session Key first.");
+          return;
+        }
+        const encoded = btoa(input + activeKey);
+        showResult("Encrypted: " + encoded);
+      }
+
+      function runDecryption() {
+        const input = document.getElementById("decipherInput").value;
+        try {
+          const decoded = atob(input).replace(activeKey, "");
+          showResult("Deciphered: " + decoded);
+        } catch (e) {
+          showResult("Error: Invalid Hash Format");
+        }
+      }
+
+      function showResult(text) {
+        const outputDiv = document.getElementById("hashOutput");
+        document.getElementById("resultText").textContent = text;
+        outputDiv.style.display = "block";
+      }
+
+      function copyResult() {
+        const fullText = document.getElementById("resultText").textContent;
+        const value = fullText.includes(": ")
+          ? fullText.split(": ")[1]
+          : fullText;
+        navigator.clipboard.writeText(value);
+
+        const btn = document.querySelector(".copy-btn");
+        btn.textContent = "Done!";
+        setTimeout(() => (btn.textContent = "Copy Result"), 2000);
+      }
+
+      function updateGreeting() {
+        const hour = new Date().getHours();
+        const greetEl = document.getElementById("timeGreeting");
+        if (hour < 12) greetEl.textContent = "Good Morning,";
+        else if (hour < 18) greetEl.textContent = "Good Afternoon,";
+        else greetEl.textContent = "Good Evening,";
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        updateGreeting();
+        setTimeout(() => {
+          document.querySelectorAll(".reveal").forEach((el, i) => {
+            setTimeout(() => el.classList.add("active"), i * 200);
+          });
+        }, 100);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hascipher Pro | FAQ & Support</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg-main: #ebf4ff;
+        --bg-card: #ffffff;
+        --accent-primary: #2563eb;
+        --accent-soft: #dbeafe;
+        --accent-deep: #1e40af;
+        --text-dark: #0f172a;
+        --text-gray: #64748b;
+        --window-border: #cbd5e1;
+        --success: #10b981;
+      }
+
+      * {
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        color: var(--text-dark);
+        background: linear-gradient(
+          135deg,
+          #dbeafe 0%,
+          #eff6ff 50%,
+          #f8fafc 100%
+        );
+        background-attachment: fixed;
+        min-height: 100vh;
+      }
+
+      .page-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px;
+      }
+
+      .hero-section {
+        text-align: center;
+        max-width: 900px;
+        margin-bottom: 30px;
+      }
+      h1 {
+        font-size: clamp(24px, 4vw, 40px);
+        font-weight: 700;
+        color: var(--text-dark);
+        margin: 0;
+      }
+
+      .mockup-container {
+        width: 100%;
+        max-width: 950px;
+        margin-top: 20px;
+      }
+
+      .desktop-frame {
+        background: var(--bg-card);
+        border: 1px solid var(--window-border);
+        border-radius: 16px;
+        min-height: 650px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(37, 99, 235, 0.15);
+      }
+
+      .desktop-header {
+        background: #f1f5f9;
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--window-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .window-dots {
+        display: flex;
+        gap: 8px;
+      }
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+      .dot-r {
+        background: #ff5f56;
+      }
+      .dot-y {
+        background: #ffbd2e;
+      }
+      .dot-g {
+        background: #27c93f;
+      }
+
+      .search-wrapper {
+        padding: 25px 40px;
+        background: #ffffff;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      .search-box {
+        flex-grow: 1;
+        position: relative;
+      }
+      .search-box i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-gray);
+      }
+      .faq-search {
+        width: 100%;
+        padding: 14px 14px 14px 45px;
+        border-radius: 10px;
+        border: 1px solid var(--window-border);
+        font-size: 15px;
+        outline: none;
+        transition: all 0.2s;
+      }
+      .faq-search:focus {
+        border-color: var(--accent-primary);
+        box-shadow: 0 0 0 4px var(--accent-soft);
+      }
+
+      .main-layout {
+        display: flex;
+        flex-grow: 1;
+        height: 500px;
+      }
+
+      .sidebar {
+        width: 240px;
+        background: #f8fafc;
+        border-right: 1px solid var(--window-border);
+        padding: 20px 10px;
+        flex-shrink: 0;
+      }
+      .nav-item {
+        padding: 12px 18px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-gray);
+        cursor: pointer;
+        border-radius: 8px;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: 0.2s;
+      }
+      .nav-item i {
+        width: 18px;
+        text-align: center;
+        font-size: 16px;
+      }
+      .nav-item:hover,
+      .nav-item.active {
+        background: var(--accent-soft);
+        color: var(--accent-primary);
+      }
+
+      /* CONTENT PANES */
+      .content-pane {
+        padding: 40px;
+        flex-grow: 1;
+        overflow-y: auto;
+        display: none;
+      }
+      .content-pane.active {
+        display: block;
+      }
+
+      .faq-item {
+        background: #fff;
+        border: 1px solid #f1f5f9;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .faq-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        border-color: var(--accent-soft);
+      }
+      .faq-question {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .faq-question i {
+        color: var(--accent-primary);
+        font-size: 18px;
+      }
+      .faq-answer {
+        font-size: 14px;
+        color: var(--text-gray);
+        line-height: 1.6;
+        padding-left: 30px;
+      }
+
+      .action-btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 10px;
+        background: var(--accent-primary);
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: 0.3s;
+      }
+      .action-btn:hover {
+        background: var(--accent-deep);
+        transform: scale(1.02);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: 0.8s;
+      }
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Mobile Optimization */
+      @media (max-width: 768px) {
+        .main-layout {
+          flex-direction: column;
+          height: auto;
+        }
+
+        .sidebar {
+          width: 100%;
+          border-right: none;
+          border-bottom: 1px solid var(--window-border);
+          display: flex;
+          overflow-x: auto;
+          padding: 10px;
+        }
+
+        .nav-item {
+          margin-bottom: 0;
+          margin-right: 8px;
+          white-space: nowrap;
+        }
+
+        .search-wrapper {
+          padding: 15px 20px;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .desktop-frame {
+          min-height: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-wrapper">
+      <header class="hero-section reveal">
+        <h1>
+          Help & <span style="color: var(--accent-primary)">Resources</span>
+        </h1>
+      </header>
+
+      <div class="mockup-container reveal">
+        <div class="desktop-frame">
+          <div class="desktop-header">
+            <div class="window-dots">
+              <div class="dot dot-r"></div>
+              <div class="dot dot-y"></div>
+              <div class="dot dot-g"></div>
+            </div>
+            <div
+              style="
+                font-size: 11px;
+                color: #94a3b8;
+                font-weight: 600;
+                letter-spacing: 1px;
+              "
+            >
+              <i class="fa-solid fa-shield-halved"></i> SECURE KNOWLEDGE BASE
+            </div>
+          </div>
+
+          <div class="search-wrapper">
+            <div class="search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input
+                type="text"
+                class="faq-search"
+                id="faqSearch"
+                placeholder="Search for security topics..."
+                onkeyup="filterFAQ()"
+              />
+            </div>
+            <button class="action-btn" onclick="window.history.back()">
+              <i class="fa-solid fa-arrow-left"></i> Back
+            </button>
+          </div>
+
+          <div class="main-layout">
+            <div class="sidebar">
+              <div
+                class="nav-item active"
+                id="nav-faq"
+                onclick="switchTab('faqTab', this)"
+              >
+                <i class="fa-solid fa-circle-question"></i> General FAQ
+              </div>
+              <div
+                class="nav-item"
+                id="nav-usage"
+                onclick="switchTab('usageTab', this)"
+              >
+                <i class="fa-solid fa-wand-magic-sparkles"></i> How to Use
+              </div>
+              <div
+                class="nav-item"
+                id="nav-about"
+                onclick="switchTab('aboutTab', this)"
+              >
+                <i class="fa-solid fa-circle-info"></i> About Web
+              </div>
+              <div
+                class="nav-item"
+                onclick="alert('Privacy Policy section coming soon.')"
+              >
+                <i class="fa-solid fa-lock"></i> Privacy Policy
+              </div>
+              <hr
+                style="
+                  border: 0;
+                  border-top: 1px solid var(--window-border);
+                  margin: 20px 10px;
+                "
+              />
+              <div class="nav-item" style="opacity: 0.6; cursor: default">
+                <i class="fa-solid fa-code-branch"></i> v2.0.4
+              </div>
+            </div>
+
+            <div id="faqTab" class="content-pane active">
+              <div class="faq-item">
+                <div class="faq-question">
+                  <i class="fa-solid fa-database"></i> Where is my data stored?
+                </div>
+                <div class="faq-answer">
+                  Your data is <b>never stored</b>. Hascipher operates entirely
+                  within your browser's local memory. Once you refresh or close
+                  the tab, all history is wiped clean.
+                </div>
+              </div>
+
+              <div class="faq-item">
+                <div class="faq-question">
+                  <i class="fa-solid fa-key"></i> What is the Recipient Private
+                  Key?
+                </div>
+                <div class="faq-answer">
+                  It acts as a unique 'salt' for your encryption. By sharing
+                  this key with your recipient, they can verify the hash.
+                  Without it, the generated hash remains unique and impossible
+                  to guess.
+                </div>
+              </div>
+
+              <div class="faq-item">
+                <div class="faq-question">
+                  <i class="fa-solid fa-bolt"></i> Can I decrypt a hash?
+                </div>
+                <div class="faq-answer">
+                  No. Hashing is a <b>one-way function</b>. It is designed to
+                  verify data integrity, not to be reversed back into plain
+                  text.
+                </div>
+              </div>
+            </div>
+
+            <div id="usageTab" class="content-pane">
+              <h2 style="margin-top: 0">System Operations Logic</h2>
+              <p
+                style="
+                  color: var(--text-gray);
+                  font-size: 14px;
+                  margin-bottom: 25px;
+                "
+              >
+                Follow these logical steps to use the Hascipher Engine
+                effectively.
+              </p>
+
+              <div class="faq-item">
+                <div class="faq-question">
+                  <i class="fa-solid fa-1"></i> Step 1: Generate a Session Key
+                </div>
+                <div class="faq-answer">
+                  First, click <b>"Generate New Key"</b>. This creates a unique
+                  identifier for your current session. You cannot encrypt or
+                  decipher without an active key. Use the <b>Copy</b> button to
+                  save it.
+                </div>
+              </div>
+
+              <div class="faq-item">
+                <div class="faq-question">
+                  <i class="fa-solid fa-2"></i> Step 2: Encrypting Data
+                </div>
+                <div class="faq-answer">
+                  Enter your message in the <b>Encryption Input</b> and hit
+                  Encrypt. The system combines your text with the Session Key to
+                  create a secure hash. You can copy the result to send it to
+                  others.
+                </div>
+              </div>
+
+              <div class="faq-item">
+                <div class="faq-question">
+                  <i class="fa-solid fa-3"></i> Step 3: Deciphering Logic
+                </div>
+                <div class="faq-answer">
+                  Paste the hash into the <b>Decipher Input</b>. When you click
+                  Decipher, a <b>Security Modal</b> will appear. You must paste
+                  the <i>exact</i> session key used during encryption to unlock
+                  and view the original text.
+                </div>
+              </div>
+
+              <div
+                style="
+                  background: var(--accent-soft);
+                  padding: 15px;
+                  border-radius: 8px;
+                  color: var(--accent-deep);
+                  font-size: 13px;
+                  font-weight: 500;
+                "
+              >
+                <i class="fa-solid fa-triangle-exclamation"></i> Note: If the
+                key does not match the hash, the system will return an error to
+                protect the data integrity.
+              </div>
+            </div>
+
+            <div id="aboutTab" class="content-pane">
+              <h2 style="margin-top: 0">About Hascipher</h2>
+              <p
+                style="
+                  color: var(--text-gray);
+                  line-height: 1.6;
+                  font-size: 15px;
+                "
+              >
+                <b>Hascipher</b> is a secure, client-side cryptographic tool
+                designed for modern privacy needs.
+              </p>
+
+              <h3
+                style="
+                  color: var(--accent-primary);
+                  font-size: 18px;
+                  margin-top: 30px;
+                "
+              >
+                Our Core Principles:
+              </h3>
+              <ul
+                style="
+                  color: var(--text-gray);
+                  line-height: 2;
+                  font-size: 14px;
+                  padding-left: 20px;
+                "
+              >
+                <li>
+                  <b style="color: var(--text-dark)">Zero Data Retention:</b>
+                  Browser-only processing.
+                </li>
+                <li>
+                  <b style="color: var(--text-dark)">Local Encryption:</b>
+                  Calculations stay on your device.
+                </li>
+                <li>
+                  <b style="color: var(--text-dark)">Professional UX:</b> Clean
+                  and efficient.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer
+        style="
+          margin-top: 20px;
+          color: var(--text-gray);
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        "
+      >
+        © 2026 Clifford Development • Cryptographic Excellence
+      </footer>
+    </div>
+
+    <script>
+      function switchTab(tabId, el) {
+        document
+          .querySelectorAll(".nav-item")
+          .forEach((nav) => nav.classList.remove("active"));
+        el.classList.add("active");
+
+        document
+          .querySelectorAll(".content-pane")
+          .forEach((pane) => pane.classList.remove("active"));
+        document.getElementById(tabId).classList.add("active");
+
+        if (tabId !== "faqTab") {
+          document.getElementById("faqSearch").value = "";
+          filterFAQ();
+        }
+      }
+
+      function filterFAQ() {
+        const input = document.getElementById("faqSearch").value.toLowerCase();
+        const items = document.querySelectorAll("#faqTab .faq-item");
+
+        if (
+          input.length > 0 &&
+          !document.getElementById("faqTab").classList.contains("active")
+        ) {
+          switchTab("faqTab", document.getElementById("nav-faq"));
+        }
+
+        items.forEach((item) => {
+          const text = item.innerText.toLowerCase();
+          item.style.display = text.includes(input) ? "block" : "none";
+        });
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+          document.querySelectorAll(".reveal").forEach((el, i) => {
+            setTimeout(() => el.classList.add("active"), i * 200);
+          });
+        }, 100);
+      });
+    </script>
+  </body>
+</html>
