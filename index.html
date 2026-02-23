@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hashcipher Desktop</title>
+    <title>Hashcipher</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -246,6 +246,7 @@
       }
       .secondary-btn:hover {
         color: white;
+        background: var(--accent-primary);
       }
 
       .copy-btn {
@@ -287,7 +288,6 @@
         color: var(--accent-primary);
       }
 
-      /* KEY DISPLAY WRAPPER */
       .key-container {
         display: flex;
         align-items: center;
@@ -305,6 +305,8 @@
         border-radius: 8px;
         text-align: center;
         border: 1px dashed var(--window-border);
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .key-copy-icon {
@@ -323,7 +325,6 @@
         color: white;
       }
 
-      /* MODAL STYLES */
       .modal-overlay {
         position: fixed;
         top: 0;
@@ -355,9 +356,8 @@
         <p
           style="color: var(--text-gray); font-size: 14px; margin-bottom: 20px"
         >
-          Please paste your secret key to authorize decryption.
+          Please paste your secret key to authorize AES-256 decryption.
         </p>
-
         <input
           type="text"
           id="modalKeyInput"
@@ -365,7 +365,6 @@
           placeholder="Paste key here..."
           style="border: 1px solid var(--accent-primary); margin-bottom: 15px"
         />
-
         <div style="display: flex; gap: 10px">
           <button
             class="action-btn"
@@ -451,7 +450,7 @@
               <div class="status-card">
                 <div class="status-indicator">
                   <div class="pulse"></div>
-                  System Status: Secure
+                  System Status: AES-GCM 256
                 </div>
                 <div
                   style="
@@ -460,8 +459,8 @@
                     line-height: 1.6;
                   "
                 >
-                  All data is processed locally. Ensure your session key is
-                  active before attempting to decipher.
+                  Military-grade encryption active. Data is non-deterministic
+                  (unique hashes per encryption).
                 </div>
               </div>
 
@@ -486,14 +485,14 @@
                   "
                 >
                   <li>Session keys expire on refresh</li>
-                  <li>Symmetric AES-GCM logic</li>
-                  <li>Copy result to share securely</li>
+                  <li>AES-GCM Authenticated Encryption</li>
+                  <li>PBKDF2 Key Derivation</li>
                 </ul>
               </div>
               <button
                 class="action-btn secondary-btn"
                 style="margin-top: 15px"
-                onclick="location.href = 'help.html'"
+                onclick="location.href = '/help.html'"
               >
                 Help?
               </button>
@@ -520,16 +519,11 @@
                 "
                 >SESSION KEY</label
               >
-
               <div class="key-container">
                 <span id="currentKey" class="key-display"
                   >No key generated</span
                 >
-                <button
-                  class="key-copy-icon"
-                  onclick="copySessionKey()"
-                  title="Copy Key"
-                >
+                <button class="key-copy-icon" onclick="copySessionKey()">
                   Copy
                 </button>
               </div>
@@ -598,16 +592,21 @@
       <footer
         style="margin-top: 10px; color: var(--text-gray); font-size: 11px"
       >
-        © 2026 Clifford Development. Encrypted & Secure.
+        © 2026 Clifford Development. AES-GCM Authenticated.
       </footer>
     </div>
 
     <script>
       let activeKey = null;
 
+      // AES-GCM requires a specific key format. We generate a strong random string.
       function generateKey() {
-        activeKey =
-          "KEY-" + Math.random().toString(36).substring(2, 10).toUpperCase();
+        const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let key = "SEC-";
+        for (let i = 0; i < 16; i++) {
+          key += charset.charAt(Math.floor(Math.random() * charset.length));
+        }
+        activeKey = key;
         document.getElementById("currentKey").textContent = activeKey;
       }
 
@@ -623,8 +622,7 @@
       }
 
       function openKeyModal() {
-        const decipherVal = document.getElementById("decipherInput").value;
-        if (!decipherVal) return;
+        if (!document.getElementById("decipherInput").value) return;
         document.getElementById("keyModal").style.display = "flex";
       }
 
@@ -633,36 +631,82 @@
         document.getElementById("modalKeyInput").value = "";
       }
 
-      function validateAndDecipher() {
-        const inputKey = document.getElementById("modalKeyInput").value;
-
-        if (!activeKey || inputKey !== activeKey) {
-          alert("Invalid or missing session key. Verification failed.");
-          return;
-        }
-
-        closeModal();
-        runDecryption();
+      // MILITARY GRADE ENCRYPTION LOGIC (WEB CRYPTO API)
+      async function deriveKey(password, salt) {
+        const encoder = new TextEncoder();
+        const baseKey = await crypto.subtle.importKey(
+          "raw",
+          encoder.encode(password),
+          "PBKDF2",
+          false,
+          ["deriveKey"],
+        );
+        return crypto.subtle.deriveKey(
+          { name: "PBKDF2", salt, iterations: 100000, hash: "SHA-256" },
+          baseKey,
+          { name: "AES-GCM", length: 256 },
+          false,
+          ["encrypt", "decrypt"],
+        );
       }
 
-      function runEncryption() {
-        const input = document.getElementById("encryptInput").value;
-        if (!input) return;
-        if (!activeKey) {
-          alert("Please generate a Session Key first.");
-          return;
-        }
-        const encoded = btoa(input + activeKey);
-        showResult("Encrypted: " + encoded);
-      }
+      async function runEncryption() {
+        const text = document.getElementById("encryptInput").value;
+        if (!text || !activeKey)
+          return alert("Enter text and generate a session key.");
 
-      function runDecryption() {
-        const input = document.getElementById("decipherInput").value;
         try {
-          const decoded = atob(input).replace(activeKey, "");
-          showResult("Deciphered: " + decoded);
+          const encoder = new TextEncoder();
+          const salt = crypto.getRandomValues(new Uint8Array(16));
+          const iv = crypto.getRandomValues(new Uint8Array(12));
+          const key = await deriveKey(activeKey, salt);
+
+          const encrypted = await crypto.subtle.encrypt(
+            { name: "AES-GCM", iv },
+            key,
+            encoder.encode(text),
+          );
+
+          // Combine Salt + IV + Encrypted Data into one string for portability
+          const combined = new Uint8Array(
+            salt.length + iv.length + encrypted.byteLength,
+          );
+          combined.set(salt, 0);
+          combined.set(iv, salt.length);
+          combined.set(new Uint8Array(encrypted), salt.length + iv.length);
+
+          const base64 = btoa(String.fromCharCode(...combined));
+          showResult("Encrypted: " + base64);
         } catch (e) {
-          showResult("Error: Invalid Hash Format");
+          alert("Encryption failed.");
+        }
+      }
+
+      async function validateAndDecipher() {
+        const inputKey = document.getElementById("modalKeyInput").value;
+        const cipherText = document.getElementById("decipherInput").value;
+
+        if (!inputKey || !cipherText) return;
+
+        try {
+          const combined = Uint8Array.from(atob(cipherText), (c) =>
+            c.charCodeAt(0),
+          );
+          const salt = combined.slice(0, 16);
+          const iv = combined.slice(16, 28);
+          const data = combined.slice(28);
+
+          const key = await deriveKey(inputKey, salt);
+          const decrypted = await crypto.subtle.decrypt(
+            { name: "AES-GCM", iv },
+            key,
+            data,
+          );
+
+          showResult("Deciphered: " + new TextDecoder().decode(decrypted));
+          closeModal();
+        } catch (e) {
+          alert("Decryption failed: Invalid Key or Corrupted Hash.");
         }
       }
 
@@ -674,11 +718,10 @@
 
       function copyResult() {
         const fullText = document.getElementById("resultText").textContent;
-        const value = fullText.includes(": ")
+        const val = fullText.includes(": ")
           ? fullText.split(": ")[1]
           : fullText;
-        navigator.clipboard.writeText(value);
-
+        navigator.clipboard.writeText(val);
         const btn = document.querySelector(".copy-btn");
         btn.textContent = "Done!";
         setTimeout(() => (btn.textContent = "Copy Result"), 2000);

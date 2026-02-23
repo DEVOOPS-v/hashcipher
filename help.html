@@ -355,11 +355,8 @@
               >
                 <i class="fa-solid fa-circle-info"></i> About Web
               </div>
-              <div
-                class="nav-item"
-                onclick="alert('Privacy Policy section coming soon.')"
-              >
-                <i class="fa-solid fa-lock"></i> Privacy Policy
+              <div class="nav-item" onclick="switchTab('troubleTab', this)">
+                <i class="fa-solid fa-screwdriver-wrench"></i> Troubleshooting
               </div>
               <hr
                 style="
@@ -379,33 +376,34 @@
                   <i class="fa-solid fa-database"></i> Where is my data stored?
                 </div>
                 <div class="faq-answer">
-                  Your data is <b>never stored</b>. Hascipher operates entirely
-                  within your browser's local memory. Once you refresh or close
-                  the tab, all history is wiped clean.
+                  Your data is <b>never stored on any server</b>. Hascipher
+                  operates entirely within your browser's local RAM. Once you
+                  refresh or close the tab, all session history and keys are
+                  permanently wiped.
                 </div>
               </div>
 
               <div class="faq-item">
                 <div class="faq-question">
-                  <i class="fa-solid fa-key"></i> What is the Recipient Private
-                  Key?
+                  <i class="fa-solid fa-key"></i> What is the Session Key?
                 </div>
                 <div class="faq-answer">
-                  It acts as a unique 'salt' for your encryption. By sharing
-                  this key with your recipient, they can verify the hash.
-                  Without it, the generated hash remains unique and impossible
-                  to guess.
+                  It acts as a unique cryptographic salt for your encryption. By
+                  sharing this key with your recipient, they can decipher the
+                  hash. Without the exact key, the data remains a secure,
+                  unreadable string.
                 </div>
               </div>
 
               <div class="faq-item">
                 <div class="faq-question">
-                  <i class="fa-solid fa-bolt"></i> Can I decrypt a hash?
+                  <i class="fa-solid fa-bolt"></i> Is this 100% secure?
                 </div>
                 <div class="faq-answer">
-                  No. Hashing is a <b>one-way function</b>. It is designed to
-                  verify data integrity, not to be reversed back into plain
-                  text.
+                  We use industry-standard client-side encryption. Because the
+                  <b>decryption never happens on a server</b>, it is safe from
+                  "man-in-the-middle" attacks on our end. Only those with the
+                  key can see your data.
                 </div>
               </div>
             </div>
@@ -430,8 +428,8 @@
                 <div class="faq-answer">
                   First, click <b>"Generate New Key"</b>. This creates a unique
                   identifier for your current session. You cannot encrypt or
-                  decipher without an active key. Use the <b>Copy</b> button to
-                  save it.
+                  decipher without an active key. <b>Copy</b> this key and send
+                  it securely to your recipient.
                 </div>
               </div>
 
@@ -441,9 +439,8 @@
                 </div>
                 <div class="faq-answer">
                   Enter your message in the <b>Encryption Input</b> and hit
-                  Encrypt. The system combines your text with the Session Key to
-                  create a secure hash. You can copy the result to send it to
-                  others.
+                  Encrypt. The system uses your Session Key to obfuscate the
+                  text. Copy the resulting hash and send it to your recipient.
                 </div>
               </div>
 
@@ -470,8 +467,8 @@
                 "
               >
                 <i class="fa-solid fa-triangle-exclamation"></i> Note: If the
-                key does not match the hash, the system will return an error to
-                protect the data integrity.
+                key does not match the hash perfectly, the system will return an
+                error to ensure no data is leaked.
               </div>
             </div>
 
@@ -484,8 +481,9 @@
                   font-size: 15px;
                 "
               >
-                <b>Hascipher</b> is a secure, client-side cryptographic tool
-                designed for modern privacy needs.
+                <b>Hascipher</b> is a professional, client-side cryptographic
+                tool built for users who value privacy over convenience. It
+                removes the "trusted third party" from the equation.
               </p>
 
               <h3
@@ -506,18 +504,42 @@
                 "
               >
                 <li>
-                  <b style="color: var(--text-dark)">Zero Data Retention:</b>
-                  Browser-only processing.
+                  <b style="color: var(--text-dark)">Privacy-First:</b> No
+                  cookies, no tracking.
                 </li>
                 <li>
-                  <b style="color: var(--text-dark)">Local Encryption:</b>
-                  Calculations stay on your device.
+                  <b style="color: var(--text-dark)">Local Processing:</b> Your
+                  message never leaves your computer in plain text.
                 </li>
                 <li>
-                  <b style="color: var(--text-dark)">Professional UX:</b> Clean
-                  and efficient.
+                  <b style="color: var(--text-dark)">Simplicity:</b> No accounts
+                  required. Just generate, encrypt, and go.
                 </li>
               </ul>
+            </div>
+
+            <div id="troubleTab" class="content-pane">
+              <h2 style="margin-top: 0">Troubleshooting</h2>
+              <div class="faq-item">
+                <div class="faq-question">
+                  <i class="fa-solid fa-circle-xmark"></i> "Invalid Key" Error
+                </div>
+                <div class="faq-answer">
+                  This happens if the session key is missing a character or has
+                  an extra space. Double-check that the key you are pasting is
+                  <b>identical</b> to the one used to encrypt.
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question">
+                  <i class="fa-solid fa-rotate"></i> Results Disappeared
+                </div>
+                <div class="faq-answer">
+                  If you refreshed the page, the browser memory was cleared.
+                  Because we do not store data, you will need to re-enter your
+                  key and hash to see the results again.
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -546,7 +568,9 @@
         document
           .querySelectorAll(".content-pane")
           .forEach((pane) => pane.classList.remove("active"));
-        document.getElementById(tabId).classList.add("active");
+
+        const target = document.getElementById(tabId);
+        if (target) target.classList.add("active");
 
         if (tabId !== "faqTab") {
           document.getElementById("faqSearch").value = "";
@@ -556,7 +580,7 @@
 
       function filterFAQ() {
         const input = document.getElementById("faqSearch").value.toLowerCase();
-        const items = document.querySelectorAll("#faqTab .faq-item");
+        const items = document.querySelectorAll(".content-pane .faq-item");
 
         if (
           input.length > 0 &&
